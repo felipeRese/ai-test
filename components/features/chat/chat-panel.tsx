@@ -6,6 +6,7 @@ import { Message } from 'ai'
 import { ArrowUp, MessageCirclePlus, Square } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import Textarea from 'react-textarea-autosize'
 
 interface ChatPanelProps {
@@ -17,7 +18,7 @@ interface ChatPanelProps {
   setMessages: (messages: Message[]) => void
   query?: string
   stop: () => void
-  append: (message: any) => void
+  append: (message: Message) => void
 }
 
 export default function ChatPanel({
@@ -43,12 +44,13 @@ export default function ChatPanel({
   useEffect(() => {
     if (isFirstRender.current && query && query.trim().length > 0) {
       append({
+        id: uuidv4(),
         role: 'user',
         content: query
       })
       isFirstRender.current = false
     }
-  }, [query])
+  }, [query, append])
 
   return (
     <div
